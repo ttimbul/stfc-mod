@@ -21,7 +21,7 @@ jobs:
         with:
           xmake-version: latest
           package-cache: true
-          package-cache-key: 'stfc-mod-ci'
+          package-cache-key: 'stfc-mod-ci-win'
 
       - name: Configure
         run: xmake f -m releasedbg -y
@@ -51,8 +51,8 @@ jobs:
         uses: xmake-io/github-action-setup-xmake@v1
         with:
           xmake-version: latest
-          actions-cache-folder: ".xmake-cache"
-          actions-cache-key: "mac-ci"
+          package-cache: true
+          package-cache-key: 'stfc-mod-ci-mac'
 
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@main
