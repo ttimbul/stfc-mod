@@ -16,5 +16,5 @@ debug.log
 /vsxmake*/
 .DS_Store
 
-# Processed Info.plist files
-**/Info_processed.plist
+# Generated Info.plist files (generated from templates)
+**/Info.plist

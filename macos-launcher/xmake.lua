@@ -37,30 +37,35 @@ do
     add_files("deps/PlzmaSDK/src/**/*.c")
     add_files("deps/PlzmaSDK/src/**/*.cpp")
     
-    -- Process Info.plist with version substitution before build
-    before_build(function (target)
+    -- Generate Info.plist from template during configuration
+    on_config(function (target)
         local version = get_version_from_header()
-        local info_plist_src = path.join(os.scriptdir(), "src/Info.plist")
-        local info_plist_dest = path.join(os.scriptdir(), "src/Info_processed.plist")
+        local info_plist_template = path.join(os.scriptdir(), "src/Info.plist.template")
+        local info_plist_output = path.join(os.scriptdir(), "src/Info.plist")
         
-        -- Read the template Info.plist
-        local content = io.readfile(info_plist_src)
-        -- Replace ${VERSION} placeholder with actual version
-        content = content:gsub("${VERSION}", version)
-        
-        -- Write the processed Info.plist
-        io.writefile(info_plist_dest, content)
-        print("Processed Info.plist with version: " .. version)
+        if os.isfile(info_plist_template) then
+            -- Read the template
+            local content = io.readfile(info_plist_template)
+            -- Replace ${VERSION} placeholder with actual version
+            content = content:gsub("${VERSION}", version)
+            
+            -- Write the processed Info.plist
+            io.writefile(info_plist_output, content)
+            print("Generated Info.plist with version: " .. version)
+        else
+            print("Warning: Info.plist.template not found at " .. info_plist_template)
+        end
     end)
     
-    -- Add the processed Info.plist file
-    add_files("src/Info_processed.plist")
+    -- Add the generated Info.plist file
+    add_files("src/Info.plist")
     
-    -- Clean up after build
-    after_build(function (target)
-        local info_plist_dest = path.join(os.scriptdir(), "src/Info_processed.plist")
-        if os.isfile(info_plist_dest) then
-            os.rm(info_plist_dest)
+    -- Clean up generated file after build (optional)
+    after_clean(function (target)
+        local info_plist_output = path.join(os.scriptdir(), "src/Info.plist")
+        if os.isfile(info_plist_output) then
+            os.rm(info_plist_output)
+            print("Cleaned generated Info.plist")
         end
     end)
 end
