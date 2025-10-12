@@ -1,5 +1,10 @@
 # Star Trek Fleet Command - Community Patch
 
+## IMPORTANT NOTE:
+
+The current full release 0.6.0 no longer works with the latest STFC clients.  Please use the 0.6.1.8 (Alpha) or later
+
+## BACK TO THE REGULAR STUFF:
 <p align="center">
   <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPLv3">
   <img src="https://img.shields.io/github/sponsors/netniv" alt="Sponsorship">
