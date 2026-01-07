@@ -205,4 +205,9 @@ public:
 
   std::string config_settings_url;
   std::string config_assets_url_override;
+
+  // FastTrek extensions
+  bool installFastTrekExtensions;
+  bool virtual_input_server_enabled;
+  int  virtual_input_server_port;
 };

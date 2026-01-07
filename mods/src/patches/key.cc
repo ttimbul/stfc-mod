@@ -1,7 +1,10 @@
 #include "key.h"
+#include "config.h"
 #include "prime/EventSystem.h"
 #include "str_utils.h"
 #include <prime/TMP_InputField.h>
+
+#include "patches/ft/virtual_keyboard.h"
 
 #include <string>
 #include <string_view>
@@ -222,6 +225,12 @@ bool Key::Down(KeyCode key)
   static auto GetKeyDownInt =
       il2cpp_resolve_icall_typed<bool(KeyCode)>("UnityEngine.Input::GetKeyDownInt(UnityEngine.KeyCode)");
 
+  if (Config::Get().installFastTrekExtensions) {
+    if (VirtualKeyboard::GetKeyDown(key) || VirtualKeyboard::GetKey(key)) {
+      return true;
+    }
+  }
+
   if (cacheKeyDown[(int)key] == 0) {
     cacheKeyDown[(int)key] = GetKeyDownInt(key) ? 1 : -1;
   }
@@ -233,6 +242,10 @@ bool Key::Pressed(KeyCode key)
 {
   static auto GetKeyInt =
       il2cpp_resolve_icall_typed<bool(KeyCode)>("UnityEngine.Input::GetKeyInt(UnityEngine.KeyCode)");
+
+  if (Config::Get().installFastTrekExtensions && VirtualKeyboard::GetKey(key)) {
+    return true;
+  }
 
   if (cacheKeyPressed[(int)key] == 0) {
     cacheKeyPressed[(int)key] = GetKeyInt(key) ? 1 : -1;

@@ -5,6 +5,7 @@
 
 #include <prime/NavigationPan.h>
 #include <prime/TKTouch.h>
+#include <patches/ft/virtual_pan.h>
 
 #include <spud/detour.h>
 
@@ -21,12 +22,17 @@ bool NavigationPan_LateUpdate_Hook(auto original, NavigationPan *_this)
 {
   auto d = _this->_lastDelta;
 
-  if (!Config::Get().disable_move_keys) {
+  if (!Config::Get().disable_move_keys || Config::Get().installFastTrekExtensions) {
     original(_this);
   }
 
   static auto GetMouseButton = il2cpp_resolve_icall_typed<bool(int)>("UnityEngine.Input::GetMouseButton(System.Int32)");
   static auto GetTouchCount  = il2cpp_resolve_icall_typed<int()>("UnityEngine.Input::get_touchCount()");
+
+  // Handle virtual keyboard input for camera panning
+  if (VirtualPan::HandleVirtualPan(_this)) {
+    return true;
+  }
 
   if (_this->BlockPan() || _this->_trackingPOI) {
     d->x = 0.0f;

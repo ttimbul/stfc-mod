@@ -22,7 +22,7 @@ public:
   bool IsDown();
   bool HasModifiers();
 
-  std::string GetParsedValues();
+  std::string GetParsedValues() const;
 
 private:
   std::vector<KeyCode>     Modifiers;

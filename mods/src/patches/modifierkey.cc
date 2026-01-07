@@ -102,7 +102,7 @@ bool ModifierKey::IsDown()
   return false;
 }
 
-std::string ModifierKey::GetParsedValues()
+std::string ModifierKey::GetParsedValues() const
 {
   std::string output = "";
   if (this->hasModifier) {

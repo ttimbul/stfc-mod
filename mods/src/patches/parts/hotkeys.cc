@@ -32,6 +32,9 @@
 
 #include "patches/key.h"
 #include "patches/mapkey.h"
+#include "patches/ft/virtual_mouse.h"
+#include "patches/ft/virtual_keyboard.h"
+#include "patches/ft/virtual_input_drain.h"
 
 #include <EASTL/vector.h>
 
@@ -75,6 +78,11 @@ void ScreenManager_Update_Hook(auto original, ScreenManager* _this)
   static std::chrono::time_point<std::chrono::steady_clock> select_clock = std::chrono::steady_clock::now();
 
   Key::ResetCache();
+  if (Config::Get().installFastTrekExtensions) {
+    VirtualMouse::NextFrame();
+    VirtualKeyboard::NextFrame();
+    VirtualInputDrain::Tick();
+  }
 
   if (MapKey::IsDown(GameFunction::DisableHotKeys)) {
     Config::Get().hotkeys_enabled = false;

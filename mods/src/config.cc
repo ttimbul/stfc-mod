@@ -25,6 +25,7 @@ namespace DCBS = DefaultConfig::Buffs;
 namespace DCS = DefaultConfig::Sync;
 namespace DCSC = DefaultConfig::SystemConfig;
 namespace DCSH = DefaultConfig::Shortcuts;
+namespace DCFT = DefaultConfig::FastTrek;
 
 static const eastl::tuple<const char*, int> bannerTypes[] = {
     {"Standard", ToastState::Standard},
@@ -479,6 +480,21 @@ void Config::Load()
     write_config = false;
     write_log    = false;
   }
+
+  // Helper: read from [FastTrek], but also honor lowercase [fasttrek] as a backwards/typo-friendly alias.
+  auto get_fasttrek_or = [&](std::string_view item, auto default_value) {
+    auto val = get_config_or_default(config, parsed, "FastTrek", item, default_value, write_config);
+    if (config.contains("fasttrek")) {
+      val = get_config_or_default(config, parsed, "fasttrek", item, val, write_config);
+    }
+    return val;
+  };
+
+  // FastTrek extensions
+  this->virtual_input_server_enabled =
+      get_fasttrek_or("virtual_input_server_enabled", DCFT::virtual_input_server_enabled);
+  this->virtual_input_server_port = get_fasttrek_or("virtual_input_server_port", DCFT::virtual_input_server_port);
+  this->installFastTrekExtensions = this->virtual_input_server_enabled;
 
 #if _MODDBG
   this->installUiScaleHooks     = get_config_or_default(config, parsed, "patches", "uiscalehooks", DCP::uiscalehooks, write_config);

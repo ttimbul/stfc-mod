@@ -2,6 +2,13 @@
 
 namespace DefaultConfig
 {
+
+namespace FastTrek
+{
+  constexpr bool virtual_input_server_enabled = false;
+  constexpr int  virtual_input_server_port    = 0;
+} // namespace FastTrek
+
 namespace Buffs
 {
   constexpr bool use_out_of_dock_power = true;
